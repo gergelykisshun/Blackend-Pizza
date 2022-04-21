@@ -11,7 +11,8 @@ class CartItem {
     };
 
     calcTotal(){
-        this.total = `${parseInt(this.price) * parseInt(this.amount)} Ft`;
+        this.total = 
+            `${parseInt(this.price) * parseInt(this.amount)} Ft`;
     }
 };
 
@@ -27,11 +28,36 @@ const sumCartItemAmounts = () => {
     return sum;
 }
 
+// add itemToCart object (CartItem class) to varidCart: 
+// if the same pizza is in the chart, 
+// then the amount of the pizza will be chanded,
+// otherwise the itemToCart will be pushed into validCart
+const addItemtoValidChart = (itemToCart) => {
+    const itemInsideAlready = 
+        validCart.find(item => item.name === itemToCart.name);
+
+    if (itemInsideAlready) {
+        validCart = validCart
+         .filter(item => item.name !== itemInsideAlready.name);
+
+        itemInsideAlready.amount = `${parseInt(itemInsideAlready.amount) 
+            + parseInt(itemToCart.amount)}`;
+        itemInsideAlready.calcTotal();
+
+        validCart.push(itemInsideAlready);
+        // validCart[itemInsideAlready.name] = itemInsideAlready
+    } else {
+        validCart.push(itemToCart);
+        // validCart[itemToCart.name] = itemToCart
+    }
+}
+
+
 // COMPONENTS
 const navbarHTML = () => {
     return `
     <nav class="navbar">
-        <h4><a href="#top">Blackend</a></h4>
+        <h4><a href="#top">Casa Blackend</a></h4>
         <div class="order-button-container">
             <a class="material-icon-link" href="#order">
                 <i class="material-icons">shopping_basket</i>
@@ -51,7 +77,7 @@ const welcomeHTML = () => {
     return `
     <section class="welcome-section container" id="top">
         <div>
-            <h1>Welcome to Blackend</h1>
+            <h1>Welcome to Casa Blackend</h1>
             <h3>We are a family-owned and operated Italian restaurant serving your favorite old world Italian dishes.</h3>
             <button class="primary-btn"><a href="#pizza-menu">View menu</a></button>
         </div>
@@ -91,13 +117,6 @@ const cardHTML = (pizzaList) => {
             `
     }).join('');
 };
-
-const cartIconNumberRenderer = () => {
-    let number = sumCartItemAmounts();
-    const numberHtml = document.querySelector(".amount-icon-link");
-    numberHtml.innerHTML = parseInt(number, 10);
-}
-
 
 const cartRenderer = (recCartItem) => {
     // return recList.map( listItem => {
@@ -175,17 +194,28 @@ const messageRenderer = (msg) => {
             `)
 };
 
-const renderYourCartDom = () => {
+const renderCartDom = () => {
     yourCart.innerHTML = "";
-    yourCart.insertAdjacentHTML("beforeend", validCart.map(item => cartRenderer(item)).join(''));
-    cartIconNumberRenderer();
+    yourCart.insertAdjacentHTML(
+        "beforeend", 
+        validCart
+            .map(item => cartRenderer(item))
+            .join(''));
+    renderCartIconNumber();
 }
 
-const clearYourCartDom = () => {
+const renderCartIconNumber = () => {
+    let number = sumCartItemAmounts();
+    const numberHtml = document.querySelector(".amount-icon-link");
+    numberHtml.innerHTML = parseInt(number, 10);
+}
+
+const clearCartDom = () => {
     yourCart.innerHTML = "";
     yourCart.insertAdjacentHTML("beforeend", emptyOrderHTML());
-    cartIconNumberRenderer();
+    renderCartIconNumber();
 }
+
 
 /* REMOVED FROM CARD
             <select name="size">
@@ -193,8 +223,9 @@ const clearYourCartDom = () => {
                 <option value="large">L</option>
                 <option value="extralarge">XL</option>
             </select>
-
  */
+
+
 // FETCH
 const getData = async (url) => {
     const request = await fetch(url);
@@ -203,7 +234,6 @@ const getData = async (url) => {
 };
 
 // CLICK EVENT HANDLERS
-
 
 const inputNbrIncrease = (e) => {
     let input = e.target.previousElementSibling;
@@ -251,7 +281,7 @@ const inputNbrChangeHandler = (e) => {
 
 
             // render  
-            renderYourCartDom();
+            renderCartDom();
             
         }
         
@@ -274,7 +304,7 @@ const inputNbrChangeHandler = (e) => {
             validCart[indexToChange].calcTotal();
             
             //render
-            renderYourCartDom();
+            renderCartDom();
 
         }
 
@@ -288,6 +318,7 @@ const addToCartHandler = (e) => {
     
     if (classList.contains('add-cart-btn')){
 
+        // get data from UI
         let cardElementChildren = e.target.parentNode.parentNode.children;
         let nbrInputValue = e.target.parentNode.children[0].children[1].value;
 
@@ -296,28 +327,18 @@ const addToCartHandler = (e) => {
         const price = cardElementChildren[3].textContent;
         const imageURL = cardElementChildren[0].currentSrc;
 
+        // convert data
         const itemToCart = new CartItem( name, amount, price, imageURL );
         itemToCart.calcTotal();
-        const itemInsideAlready = validCart.find( item => item.name === itemToCart.name);
 
-        if (itemInsideAlready) {
-            validCart = validCart.filter(item => item.name !== itemInsideAlready.name);
+        // add data to chart
+        addItemtoValidChart(itemToCart);
 
-            itemInsideAlready.amount = `${parseInt(itemInsideAlready.amount) +  parseInt(itemToCart.amount)}`;
-            itemInsideAlready.calcTotal();
+        // update UI
+        renderCartDom();
 
-            validCart.push(itemInsideAlready);
-            // validCart[itemInsideAlready.name] = itemInsideAlready
+        // console.log(validCart);
 
-        } else {
-            validCart.push(itemToCart);
-            // validCart[itemToCart.name] = itemToCart
-        }
-
-        // HERE WE SHOULD UPDATE UI !!!
-        console.log(validCart);
-
-        renderYourCartDom();
 
 
 
@@ -397,6 +418,7 @@ const orderSubmitHandler = (e) => {
             
              dataToSend.append('cart', JSON.stringify(validCart));
              dataToSend.append('orderDate', `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`);
+             dataToSend.append('status', 'In progress');
             // dataToSend.append('type', 'cartUpdate')
             // dataToSend.append('name', cardElementChildren[1].textContent);
             // dataToSend.append('amount', nbrInputValue);
@@ -422,7 +444,7 @@ const orderSubmitHandler = (e) => {
                         input.value = '';
                     })
                     validCart = [];
-                    clearYourCartDom();
+                    clearCartDom();
                     
                 }
             }).catch(error => {
@@ -491,9 +513,9 @@ const deleteFromCartHandler = (e) => {
 
         //render
         if (validCart.length === 0){
-            clearYourCartDom();
+            clearCartDom();
         } else {
-            renderYourCartDom();
+            renderCartDom();
         };
 
     }
