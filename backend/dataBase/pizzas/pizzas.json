@@ -1,0 +1,44 @@
+[
+    {
+        "name": "Hawaiian",
+        "description": "Chicken, pineapple, cheese",
+        "price": 1890,
+        "imageURL": "/pizzas/img/Hawaiian.jpg"
+    },
+    {
+        "name": "Mexican",
+        "description": "Chick pepper, onion, tomatoes",
+        "price": 1890,
+        "imageURL": "/pizzas/img/Mexican.jpg"
+    },
+    {
+        "name": "Pepperoni",
+        "description": "Salami, sauce, mozzarella",
+        "price": 1780,
+        "imageURL": "/pizzas/img/Pepperoni.jpg"
+    },
+    {
+        "name": "Texas",
+        "description": "Hunting sausages, mozzarella, hot peppers",
+        "price": 1890,
+        "imageURL": "/pizzas/img/Texas.jpg"
+    },
+    {
+        "name": "Carbonara",
+        "description": "Ham, parmesan, mozzarella",
+        "price": 1890,
+        "imageURL": "/pizzas/img/Carbonara.jpg"
+    },
+    {
+        "name": "Margherita",
+        "description": "Tomatoes, cheese, mozzarella, herbs",
+        "price": 1780,
+        "imageURL": "/pizzas/img/Margherita.jpg"
+    },
+    {
+        "name": "Meat lover",
+        "description": "Ham, chicken, pepperoni",
+        "price": 2190,
+        "imageURL": "/pizzas/img/Meat-lover.jpg"
+    }
+]
