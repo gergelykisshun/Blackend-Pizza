@@ -217,15 +217,6 @@ const clearCartDom = () => {
 }
 
 
-/* REMOVED FROM CARD
-            <select name="size">
-                <option value="medium" selected>M</option>
-                <option value="large">L</option>
-                <option value="extralarge">XL</option>
-            </select>
- */
-
-
 // FETCH
 const getData = async (url) => {
     const request = await fetch(url);
@@ -336,43 +327,6 @@ const addToCartHandler = (e) => {
 
         // update UI
         renderCartDom();
-
-        // console.log(validCart);
-
-
-
-
-
-// THIS WHOLE BLOCK IS ONLY VALID IF WE WANT TO POST TO CART.JSON
-        // const dataToSend = new FormData();
-
-        // dataToSend.append('type', 'cartUpdate')
-        // dataToSend.append('name', cardElementChildren[1].textContent);
-        // dataToSend.append('amount', nbrInputValue);
-        // dataToSend.append('price', cardElementChildren[3].textContent);
-        // dataToSend.append('imageUrl', cardElementChildren[0].currentSrc);
-
-        
-        // console.log(dataToSend.get("name"))
-        // console.log(dataToSend.get("amount"))
-        // console.log(dataToSend.get("price"))
-        // console.log(dataToSend.get("imageUrl"))
-
-        // const fetchSetup = {
-        //     method: 'POST',
-        //     body: dataToSend
-        // }
-
-        // fetch('/', fetchSetup).then(data => {
-        //     if (data.status === 200){
-        //         const itemSent = new CartItem( dataToSend.get("name"),dataToSend.get("amount"),dataToSend.get("price"), dataToSend.get("imageUrl") );
-        //         validCart.push(itemSent);
-        //         root.insertAdjacentHTML("beforeend", cartRenderer(itemSent));
-        //     }
-        // }).catch(error => {
-        //     console.log(error);
-        // });
-        
     }
 }
 
@@ -419,17 +373,6 @@ const orderSubmitHandler = (e) => {
              dataToSend.append('cart', JSON.stringify(validCart));
              dataToSend.append('orderDate', `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`);
              dataToSend.append('status', 'In progress');
-            // dataToSend.append('type', 'cartUpdate')
-            // dataToSend.append('name', cardElementChildren[1].textContent);
-            // dataToSend.append('amount', nbrInputValue);
-            // dataToSend.append('price', cardElementChildren[3].textContent);
-            // dataToSend.append('imageUrl', cardElementChildren[0].currentSrc);
-
-            // console.dir(dataToSend.get("cart"));
-            // console.log(dataToSend.get("name"))
-            // console.log(dataToSend.get("amount"))
-            // console.log(dataToSend.get("price"))
-            // console.log(dataToSend.get("imageUrl"))
 
             const fetchSetup = {
                 method: 'POST',

@@ -2,7 +2,7 @@ const express = require('express');
 const fileUpload = require('express-fileupload');
 const cookieParser = require("cookie-parser");
 const session = require('express-session');
-const myStore = new session.MemoryStore();
+// const myStore = new session.MemoryStore();
 const path = require('path');
 const fs = require('fs');
 const app = express();
@@ -27,11 +27,6 @@ app.use('/public', express.static(absolutePathPub));
 app.use('/pizzas', express.static(absolutePathPizzasJSON));
 app.use('/admin', express.static(`${frontendPath}/admin`));
 
-// Logs every request path
-// app.use((req, res, next) => {
-//     next()
-//     console.log(`${req.method} ${req.path} => ${res.statusCode}`)
-// });
 
 const cookieGenerator = () => {
 	let cookie = `user${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}`;
@@ -92,31 +87,6 @@ app.get('/my-orders', (req, res) => {
 		res.send('Something happened');
 	}
 
-});
-
-// DELETE MENU ITEM
-// DELETE http://127.0.0.1:9000/pizzas/Mexican
-app.delete("/pizzas/:name", (req, res) => {
-	fs.readFile(`${absolutePathPizzasJSON}/pizzas.json`, (error, data) => {
-		if(error) {
-			console.log(error);
-			res.send("Error reading pizzas file.");
-		} else {
-			const pizzas = JSON.parse(data);
-			console.log(req.params.name);
-			const filteredPizza = pizzas.filter(pizzaItem => pizzaItem.name !== req.params.name);
-
-			// wrtieFile metodus - meg kell adni az eleresi utvonalat, plusz string-ge kell alakitani, hogy a fajlba bele tudjuk irni
-			fs.writeFile(`${absolutePathPizzasJSON}/pizzas.json`, JSON.stringify(filteredPizza), error => {
-				if(error) {
-					console.log(error);
-					res.send("Error writing pizza file.");
-				}
-			})
-			// itt kuldjuk vissza a valaszuzenetet
-			res.send({"deleted": true});
-		}
-	})
 });
 
 
