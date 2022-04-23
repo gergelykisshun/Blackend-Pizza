@@ -1,6 +1,6 @@
 // GLOBAL VARIABLES
 let validCart = [];
-let yourCart;
+// let yourCart;
 
 class CartItem {
     constructor(name, amount, price, imageURL){
@@ -28,10 +28,6 @@ const sumCartItemAmounts = () => {
     return sum;
 }
 
-// add itemToCart object (CartItem class) to varidCart: 
-// if the same pizza is in the chart, 
-// then the amount of the pizza will be chanded,
-// otherwise the itemToCart will be pushed into validCart
 const addItemtoValidChart = (itemToCart) => {
     const itemInsideAlready = 
         validCart.find(item => item.name === itemToCart.name);
@@ -194,27 +190,27 @@ const messageRenderer = (msg) => {
             `)
 };
 
-const renderCartDom = () => {
-    yourCart.innerHTML = "";
-    yourCart.insertAdjacentHTML(
-        "beforeend", 
-        validCart
-            .map(item => cartRenderer(item))
-            .join(''));
-    renderCartIconNumber();
-}
+// const renderCartDom = () => {
+//     yourCart.innerHTML = "";
+//     yourCart.insertAdjacentHTML(
+//         "beforeend", 
+//         validCart
+//             .map(item => cartRenderer(item))
+//             .join(''));
+//     renderCartIconNumber();
+// }
 
-const renderCartIconNumber = () => {
-    let number = sumCartItemAmounts();
-    const numberHtml = document.querySelector(".amount-icon-link");
-    numberHtml.innerHTML = parseInt(number, 10);
-}
+// const renderCartIconNumber = () => {
+//     let number = sumCartItemAmounts();
+//     const numberHtml = document.querySelector(".amount-icon-link");
+//     numberHtml.innerHTML = parseInt(number, 10);
+// }
 
-const clearCartDom = () => {
-    yourCart.innerHTML = "";
-    yourCart.insertAdjacentHTML("beforeend", emptyOrderHTML());
-    renderCartIconNumber();
-}
+// const clearCartDom = () => {
+//     yourCart.innerHTML = "";
+//     yourCart.insertAdjacentHTML("beforeend", emptyOrderHTML());
+//     renderCartIconNumber();
+// }
 
 
 // FETCH
@@ -271,8 +267,8 @@ const inputNbrChangeHandler = (e) => {
             validCart[indexToChange].calcTotal();
 
 
-            // render  
-            renderCartDom();
+            // // render  
+            // renderCartDom();
             
         }
         
@@ -294,8 +290,8 @@ const inputNbrChangeHandler = (e) => {
             validCart[indexToChange].amount = newNbrValue;
             validCart[indexToChange].calcTotal();
             
-            //render
-            renderCartDom();
+            // //render
+            // renderCartDom();
 
         }
 
@@ -325,8 +321,8 @@ const addToCartHandler = (e) => {
         // add data to chart
         addItemtoValidChart(itemToCart);
 
-        // update UI
-        renderCartDom();
+        // // update UI
+        // renderCartDom();
     }
 }
 
