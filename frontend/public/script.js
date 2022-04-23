@@ -1,6 +1,5 @@
 // GLOBAL VARIABLES
 let validCart = [];
-// let yourCart;
 
 class CartItem {
     constructor(name, amount, price, imageURL){
@@ -16,17 +15,6 @@ class CartItem {
     }
 };
 
-const sumCartItemAmounts = () => {
-
-    // count cartitems
-    let sum = 0;
-
-    for (const cartItem of validCart) {
-        sum += parseInt(cartItem.amount);
-    }
-    // console.log(sum);
-    return sum;
-}
 
 const addItemtoValidChart = (itemToCart) => {
     const itemInsideAlready = 
@@ -190,28 +178,6 @@ const messageRenderer = (msg) => {
             `)
 };
 
-// const renderCartDom = () => {
-//     yourCart.innerHTML = "";
-//     yourCart.insertAdjacentHTML(
-//         "beforeend", 
-//         validCart
-//             .map(item => cartRenderer(item))
-//             .join(''));
-//     renderCartIconNumber();
-// }
-
-// const renderCartIconNumber = () => {
-//     let number = sumCartItemAmounts();
-//     const numberHtml = document.querySelector(".amount-icon-link");
-//     numberHtml.innerHTML = parseInt(number, 10);
-// }
-
-// const clearCartDom = () => {
-//     yourCart.innerHTML = "";
-//     yourCart.insertAdjacentHTML("beforeend", emptyOrderHTML());
-//     renderCartIconNumber();
-// }
-
 
 // FETCH
 const getData = async (url) => {
@@ -266,9 +232,6 @@ const inputNbrChangeHandler = (e) => {
             validCart[indexToChange].amount = newNbrValue;
             validCart[indexToChange].calcTotal();
 
-
-            // // render  
-            // renderCartDom();
             
         }
         
@@ -290,9 +253,6 @@ const inputNbrChangeHandler = (e) => {
             validCart[indexToChange].amount = newNbrValue;
             validCart[indexToChange].calcTotal();
             
-            // //render
-            // renderCartDom();
-
         }
 
 
@@ -321,8 +281,6 @@ const addToCartHandler = (e) => {
         // add data to chart
         addItemtoValidChart(itemToCart);
 
-        // // update UI
-        // renderCartDom();
     }
 }
 
@@ -470,8 +428,6 @@ const init = async () => {
     root.insertAdjacentHTML("beforeend", welcomeHTML());
     root.insertAdjacentHTML("beforeend", containerHTML('Our Best Pizzas', cardHTML(pizzaList)));
     root.insertAdjacentHTML("beforeend", orderHTML());
-
-    yourCart = document.querySelector(".your-cart");
 
     // click event calls
     document.addEventListener('click', inputNbrChangeHandler);
