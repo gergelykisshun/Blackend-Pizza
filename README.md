@@ -10,6 +10,6 @@ Backend API created with Express.js
 
 ## Admin site features
 
-- visit /admin endpoint for login (username: Frank, password: 12345)
-- can check, edit and remove available pizzas
-- can check, edit and remove received orders
+- Visit /admin endpoint for login (username: Frank, password: 12345)
+- Can check, edit and remove available pizzas
+- Can check, edit and remove received orders
