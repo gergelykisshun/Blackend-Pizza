@@ -28,7 +28,7 @@ const welcomeHTML = () => {
         <div>
             <h1>Welcome to Blackend</h1>
             <h3>We are a family-owned and operated Italian restaurant serving your favorite old world Italian dishes.</h3>
-            <button class="primary-btn"><a href="#pizza-menu">View menu</a></button>
+            <a href="#pizza-menu"><button class="primary-btn">View menu</button></a>
         </div>
         <img src="public/welcome-image.png" alt="Image of a pizza with tomato and pepper">
     </section>
