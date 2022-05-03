@@ -1,5 +1,6 @@
 // GLOBAL VARIABLES
 let validCart = [];
+let yourCart;
 
 class CartItem {
     constructor(name, amount, price, imageURL){
@@ -8,60 +9,24 @@ class CartItem {
         this.price = price;
         this.imageURL = imageURL;
     };
-
     calcTotal(){
-        this.total = 
-            `${parseInt(this.price) * parseInt(this.amount)} Ft`;
+        this.total = `${parseInt(this.price) * parseInt(this.amount)} Ft`;
     }
 };
-
-
-const addItemtoValidChart = (itemToCart) => {
-    const itemInsideAlready = 
-        validCart.find(item => item.name === itemToCart.name);
-
-    if (itemInsideAlready) {
-        validCart = validCart
-         .filter(item => item.name !== itemInsideAlready.name);
-
-        itemInsideAlready.amount = `${parseInt(itemInsideAlready.amount) 
-            + parseInt(itemToCart.amount)}`;
-        itemInsideAlready.calcTotal();
-
-        validCart.push(itemInsideAlready);
-        // validCart[itemInsideAlready.name] = itemInsideAlready
-    } else {
-        validCart.push(itemToCart);
-        // validCart[itemToCart.name] = itemToCart
-    }
-}
-
-
 // COMPONENTS
 const navbarHTML = () => {
     return `
     <nav class="navbar">
-        <h4><a href="#top">Casa Blackend</a></h4>
-        <div class="order-button-container">
-            <a class="material-icon-link" href="#order">
-                <i class="material-icons">shopping_basket</i>
-            </a>
-            <a class="basket-text-link" href="#order">
-                Basket | 
-            </a>
-            <a class="amount-icon-link" href="#order">
-                0
-            </a>
-        </div>
+        <h4><a href="#top">Blackend</a></h4>
+        <a href="#order"><i class="material-icons left">shopping_basket</i> Basket</a>
     </nav>
     `;
 };
-
 const welcomeHTML = () => {
     return `
     <section class="welcome-section container" id="top">
         <div>
-            <h1>Welcome to Casa Blackend</h1>
+            <h1>Welcome to Blackend</h1>
             <h3>We are a family-owned and operated Italian restaurant serving your favorite old world Italian dishes.</h3>
             <button class="primary-btn"><a href="#pizza-menu">View menu</a></button>
         </div>
@@ -69,7 +34,6 @@ const welcomeHTML = () => {
     </section>
     `
 };
-
 const containerHTML = (sectionName, recPizzaHTML) => {
     return `
     <section class="our-pizzas container" id="pizza-menu">
@@ -80,7 +44,6 @@ const containerHTML = (sectionName, recPizzaHTML) => {
     </section>
     `
 };
-
 const cardHTML = (pizzaList) => {
     return Array.from(pizzaList).map(pizza => {
         return `
@@ -101,7 +64,6 @@ const cardHTML = (pizzaList) => {
             `
     }).join('');
 };
-
 const cartRenderer = (recCartItem) => {
     // return recList.map( listItem => {
         return `
@@ -119,7 +81,6 @@ const cartRenderer = (recCartItem) => {
         `;
     // }).join('');
 }
-
 const prevOrderRenderer = (recPizza) => {
     return `
     <div class="prev-order-item">
@@ -129,7 +90,6 @@ const prevOrderRenderer = (recPizza) => {
     </div>
     `
 };
-
 const orderHTML = () => {
     return `
     <section class="order-section container" id="order">
@@ -149,7 +109,7 @@ const orderHTML = () => {
                     <input placeholder="Email" type="text" id="email" name="email">
                 </form>
                 <div>
-                    <h3>Basket</h3>
+                    <h3>Order details</h3>
                     <div class="your-cart">${emptyOrderHTML()}</div>
                     <button class="checkout-btn">Checkout</button>
                     <button class="previous-orders-btn">My Orders</button>
@@ -158,14 +118,12 @@ const orderHTML = () => {
     </section>
     `
 };
-
 const emptyOrderHTML = () => {
     return `
         <p>Your basket is empty</p>
         <p class="empty-message" >Scroll up to our menu to find what you are looking for and add to your basket</p>
     `
 }
-
 const messageRenderer = (msg) => {
     root.insertAdjacentHTML("beforeend", `
             <section class="prev-order-overlay">
@@ -177,61 +135,59 @@ const messageRenderer = (msg) => {
             </section>
             `)
 };
-
-
+const renderYourCartDom = () => {
+    yourCart.innerHTML = "";
+    yourCart.insertAdjacentHTML("beforeend", validCart.map(item => cartRenderer(item)).join(''));
+}
+/* REMOVED FROM CARD
+            <select name="size">
+                <option value="medium" selected>M</option>
+                <option value="large">L</option>
+                <option value="extralarge">XL</option>
+            </select>
+ */
 // FETCH
 const getData = async (url) => {
     const request = await fetch(url);
     const result = await request.json();
     return result;
 };
-
 // CLICK EVENT HANDLERS
-
 const inputNbrIncrease = (e) => {
     let input = e.target.previousElementSibling;
     let inputValue = parseInt(input.value);
-
     inputValue += 1;
     input.setAttribute('value', inputValue);
-
     return inputValue;
 };
-
 const inputNbrDecrease = (e) => {
     
     let input = e.target.nextElementSibling;
     let inputValue = parseInt(input.value);
-
     if (inputValue > 0){
         inputValue -= 1;
         input.setAttribute('value', inputValue);
     }
-
     return inputValue;
-
 };
-
 const inputNbrChangeHandler = (e) => {
     let classList = e.target.classList;
     
     if(classList.contains('minus-btn')){
-
         const newNbrValue = inputNbrDecrease(e);
         
         if(e.target.parentNode.parentNode.classList.contains('cart-card')){ 
             // update cart data
-
             let indexToChange;
             validCart.forEach( (item, i ) => {
                 if (item.name === e.target.parentNode.parentNode.children[1].textContent){
                     indexToChange = i;
                 }
             });
-
             validCart[indexToChange].amount = newNbrValue;
             validCart[indexToChange].calcTotal();
-
+            // render  
+            renderYourCartDom();
             
         }
         
@@ -241,7 +197,6 @@ const inputNbrChangeHandler = (e) => {
         const newNbrValue = inputNbrIncrease(e);
         
         if(e.target.parentNode.parentNode.classList.contains('cart-card')){ 
-
             //change cart data
             let indexToChange;
             validCart.forEach( (item, i ) => {
@@ -253,64 +208,83 @@ const inputNbrChangeHandler = (e) => {
             validCart[indexToChange].amount = newNbrValue;
             validCart[indexToChange].calcTotal();
             
+            //render
+            renderYourCartDom();
         }
-
-
     };
-
 }
-
 const addToCartHandler = (e) => {
     let classList = e.target.classList;
     
     if (classList.contains('add-cart-btn')){
-
-        // get data from UI
         let cardElementChildren = e.target.parentNode.parentNode.children;
         let nbrInputValue = e.target.parentNode.children[0].children[1].value;
-
         const name = cardElementChildren[1].textContent;
         const amount = nbrInputValue;
         const price = cardElementChildren[3].textContent;
         const imageURL = cardElementChildren[0].currentSrc;
-
-        // convert data
         const itemToCart = new CartItem( name, amount, price, imageURL );
         itemToCart.calcTotal();
-
-        // add data to chart
-        addItemtoValidChart(itemToCart);
-
+        const itemInsideAlready = validCart.find( item => item.name === itemToCart.name);
+        if (itemInsideAlready) {
+            validCart = validCart.filter(item => item.name !== itemInsideAlready.name);
+            itemInsideAlready.amount = `${parseInt(itemInsideAlready.amount) +  parseInt(itemToCart.amount)}`;
+            itemInsideAlready.calcTotal();
+            validCart.push(itemInsideAlready);
+            // validCart[itemInsideAlready.name] = itemInsideAlready
+        } else {
+            validCart.push(itemToCart);
+            // validCart[itemToCart.name] = itemToCart
+        }
+        // HERE WE SHOULD UPDATE UI !!!
+        console.log(validCart);
+        renderYourCartDom();
+// THIS WHOLE BLOCK IS ONLY VALID IF WE WANT TO POST TO CART.JSON
+        // const dataToSend = new FormData();
+        // dataToSend.append('type', 'cartUpdate')
+        // dataToSend.append('name', cardElementChildren[1].textContent);
+        // dataToSend.append('amount', nbrInputValue);
+        // dataToSend.append('price', cardElementChildren[3].textContent);
+        // dataToSend.append('imageUrl', cardElementChildren[0].currentSrc);
+        
+        // console.log(dataToSend.get("name"))
+        // console.log(dataToSend.get("amount"))
+        // console.log(dataToSend.get("price"))
+        // console.log(dataToSend.get("imageUrl"))
+        // const fetchSetup = {
+        //     method: 'POST',
+        //     body: dataToSend
+        // }
+        // fetch('/', fetchSetup).then(data => {
+        //     if (data.status === 200){
+        //         const itemSent = new CartItem( dataToSend.get("name"),dataToSend.get("amount"),dataToSend.get("price"), dataToSend.get("imageUrl") );
+        //         validCart.push(itemSent);
+        //         root.insertAdjacentHTML("beforeend", cartRenderer(itemSent));
+        //     }
+        // }).catch(error => {
+        //     console.log(error);
+        // });
+        
     }
 }
-
 const checkInputFieldContent = (recListOfInputFields) => {
-
     let fieldsAreFilled = [];
-
     recListOfInputFields.forEach(el => {
-
         if (el.value){
             fieldsAreFilled.push(true);
         } else {
             fieldsAreFilled.push(false);
         }
     })
-
     return fieldsAreFilled;
-
 };
-
 const orderSubmitHandler = (e) => {
     let classList = e.target.classList;
     if(classList.contains('checkout-btn')){
         const form = document.querySelector('.order-section article form');
         const inputFields = document.querySelectorAll('.order-section article form input');
-
         let fieldsAreFilled = checkInputFieldContent(inputFields);
-
         if (fieldsAreFilled.indexOf(false) !== -1) {
-
             messageRenderer('Please fill all information before sending your order!');
             // alert('Please fill all information before sending your order!');
             
@@ -318,21 +292,27 @@ const orderSubmitHandler = (e) => {
             
             messageRenderer('Your cart is empty!');
             // alert('Your cart is empty!');
-
         } else {
             const today = new Date();
-
             const dataToSend = new FormData(form);
-            
-             dataToSend.append('cart', JSON.stringify(validCart));
-             dataToSend.append('orderDate', `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`);
-             dataToSend.append('status', 'In progress');
 
+             dataToSend.append('cart', JSON.stringify(validCart));
+             dataToSend.append('orderDate', `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`);
+             dataToSend.append('orderDate', `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`);
+            // dataToSend.append('type', 'cartUpdate')
+            // dataToSend.append('name', cardElementChildren[1].textContent);
+            // dataToSend.append('amount', nbrInputValue);
+            // dataToSend.append('price', cardElementChildren[3].textContent);
+            // dataToSend.append('imageUrl', cardElementChildren[0].currentSrc);
+            // console.dir(dataToSend.get("cart"));
+            // console.log(dataToSend.get("name"))
+            // console.log(dataToSend.get("amount"))
+            // console.log(dataToSend.get("price"))
+            // console.log(dataToSend.get("imageUrl"))
             const fetchSetup = {
                 method: 'POST',
                 body: dataToSend
             };
-
             fetch('/', fetchSetup).then(data => {
                 if (data.status === 200){
                     messageRenderer('Your order was successful!');
@@ -341,28 +321,22 @@ const orderSubmitHandler = (e) => {
                         input.value = '';
                     })
                     validCart = [];
-                    clearCartDom();
+                    yourCart.innerHTML = "";
+                    yourCart.insertAdjacentHTML("beforeend", emptyOrderHTML());
                     
                 }
             }).catch(error => {
                 console.log(error);
             });
-
         }
-
     }
-
 };
-
 const seePreviousOrders = async (e) => {
     let classList = e.target.classList;
     if (classList.contains('previous-orders-btn')){
-
         const result = await fetch('/my-orders');
         const orders = await result.json();
-
         if (orders.length === 0) {
-
             messageRenderer('You have no previous orders!');
         
         } else {
@@ -390,45 +364,37 @@ const seePreviousOrders = async (e) => {
     }
         
 };
-
 const closePreviousOrders = (e) => {
     let classList = e.target.classList;
     if (classList.contains('prev-order-overlay')){
         document.querySelector('.prev-order-overlay').remove();
     }  
 };
-
-
 const deleteFromCartHandler = (e) => {
     let classList = e.target.classList;
     if (classList.contains('delete-item-btn')){
         const pizzaName = e.target.parentNode.children[1].textContent;
-
         validCart = validCart.filter(item => item.name !== pizzaName);
-
         console.log(validCart);
-
         //render
         if (validCart.length === 0){
-            clearCartDom();
+            yourCart.innerHTML = "";
+            yourCart.insertAdjacentHTML("beforeend", emptyOrderHTML());
         } else {
-            renderCartDom();
+            renderYourCartDom();
         };
-
     }
 };
-
 const init = async () => {
     const root = document.getElementById('root');
     // fetching data
     const pizzaList = await getData('/pizzas/pizzas.json');
-
     // adding HTML to the site
     root.insertAdjacentHTML("beforeend", navbarHTML());
     root.insertAdjacentHTML("beforeend", welcomeHTML());
     root.insertAdjacentHTML("beforeend", containerHTML('Our Best Pizzas', cardHTML(pizzaList)));
     root.insertAdjacentHTML("beforeend", orderHTML());
-
+    yourCart = document.querySelector(".your-cart");
     // click event calls
     document.addEventListener('click', inputNbrChangeHandler);
     document.addEventListener('click', addToCartHandler);
@@ -437,5 +403,4 @@ const init = async () => {
     document.addEventListener('click', seePreviousOrders);
     document.addEventListener('click', closePreviousOrders);
 };
-
 window.addEventListener('load', init);
