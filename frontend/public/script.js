@@ -65,7 +65,6 @@ const cardHTML = (pizzaList) => {
     }).join('');
 };
 const cartRenderer = (recCartItem) => {
-    // return recList.map( listItem => {
         return `
         <div class="cart-card">
             <img src="${recCartItem.imageURL}" alt="${recCartItem.name}">
@@ -79,8 +78,8 @@ const cartRenderer = (recCartItem) => {
             <button class="delete-item-btn">X Remove</button>
         </div>
         `;
-    // }).join('');
 }
+
 const prevOrderRenderer = (recPizza) => {
     return `
     <div class="prev-order-item">
@@ -135,25 +134,22 @@ const messageRenderer = (msg) => {
             </section>
             `)
 };
+
 const renderYourCartDom = () => {
     yourCart.innerHTML = "";
     yourCart.insertAdjacentHTML("beforeend", validCart.map(item => cartRenderer(item)).join(''));
 }
-/* REMOVED FROM CARD
-            <select name="size">
-                <option value="medium" selected>M</option>
-                <option value="large">L</option>
-                <option value="extralarge">XL</option>
-            </select>
- */
+
 // FETCH
 const getData = async (url) => {
     const request = await fetch(url);
     const result = await request.json();
     return result;
 };
+
 // CLICK EVENT HANDLERS
 const inputNbrIncrease = (e) => {
+
     let input = e.target.previousElementSibling;
     let inputValue = parseInt(input.value);
     inputValue += 1;
@@ -170,6 +166,7 @@ const inputNbrDecrease = (e) => {
     }
     return inputValue;
 };
+
 const inputNbrChangeHandler = (e) => {
     let classList = e.target.classList;
     
@@ -231,40 +228,11 @@ const addToCartHandler = (e) => {
             itemInsideAlready.amount = `${parseInt(itemInsideAlready.amount) +  parseInt(itemToCart.amount)}`;
             itemInsideAlready.calcTotal();
             validCart.push(itemInsideAlready);
-            // validCart[itemInsideAlready.name] = itemInsideAlready
         } else {
             validCart.push(itemToCart);
-            // validCart[itemToCart.name] = itemToCart
         }
-        // HERE WE SHOULD UPDATE UI !!!
-        console.log(validCart);
+
         renderYourCartDom();
-// THIS WHOLE BLOCK IS ONLY VALID IF WE WANT TO POST TO CART.JSON
-        // const dataToSend = new FormData();
-        // dataToSend.append('type', 'cartUpdate')
-        // dataToSend.append('name', cardElementChildren[1].textContent);
-        // dataToSend.append('amount', nbrInputValue);
-        // dataToSend.append('price', cardElementChildren[3].textContent);
-        // dataToSend.append('imageUrl', cardElementChildren[0].currentSrc);
-        
-        // console.log(dataToSend.get("name"))
-        // console.log(dataToSend.get("amount"))
-        // console.log(dataToSend.get("price"))
-        // console.log(dataToSend.get("imageUrl"))
-        // const fetchSetup = {
-        //     method: 'POST',
-        //     body: dataToSend
-        // }
-        // fetch('/', fetchSetup).then(data => {
-        //     if (data.status === 200){
-        //         const itemSent = new CartItem( dataToSend.get("name"),dataToSend.get("amount"),dataToSend.get("price"), dataToSend.get("imageUrl") );
-        //         validCart.push(itemSent);
-        //         root.insertAdjacentHTML("beforeend", cartRenderer(itemSent));
-        //     }
-        // }).catch(error => {
-        //     console.log(error);
-        // });
-        
     }
 }
 const checkInputFieldContent = (recListOfInputFields) => {
@@ -286,12 +254,10 @@ const orderSubmitHandler = (e) => {
         let fieldsAreFilled = checkInputFieldContent(inputFields);
         if (fieldsAreFilled.indexOf(false) !== -1) {
             messageRenderer('Please fill all information before sending your order!');
-            // alert('Please fill all information before sending your order!');
             
         } else if (validCart.length === 0){
             
             messageRenderer('Your cart is empty!');
-            // alert('Your cart is empty!');
         } else {
             const today = new Date();
             const dataToSend = new FormData(form);
@@ -299,16 +265,6 @@ const orderSubmitHandler = (e) => {
              dataToSend.append('cart', JSON.stringify(validCart));
              dataToSend.append('orderDate', `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`);
              dataToSend.append('orderDate', `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`);
-            // dataToSend.append('type', 'cartUpdate')
-            // dataToSend.append('name', cardElementChildren[1].textContent);
-            // dataToSend.append('amount', nbrInputValue);
-            // dataToSend.append('price', cardElementChildren[3].textContent);
-            // dataToSend.append('imageUrl', cardElementChildren[0].currentSrc);
-            // console.dir(dataToSend.get("cart"));
-            // console.log(dataToSend.get("name"))
-            // console.log(dataToSend.get("amount"))
-            // console.log(dataToSend.get("price"))
-            // console.log(dataToSend.get("imageUrl"))
             const fetchSetup = {
                 method: 'POST',
                 body: dataToSend
@@ -316,7 +272,6 @@ const orderSubmitHandler = (e) => {
             fetch('/', fetchSetup).then(data => {
                 if (data.status === 200){
                     messageRenderer('Your order was successful!');
-                    // alert('Your order was successful!');
                     inputFields.forEach( input => {
                         input.value = '';
                     })
@@ -331,6 +286,7 @@ const orderSubmitHandler = (e) => {
         }
     }
 };
+
 const seePreviousOrders = async (e) => {
     let classList = e.target.classList;
     if (classList.contains('previous-orders-btn')){
@@ -351,7 +307,6 @@ const seePreviousOrders = async (e) => {
                 `
             }).join('');
             
-                
             root.insertAdjacentHTML("beforeend", `
             <section class="prev-order-overlay">
                 <div class="prev-order-container">
@@ -394,6 +349,7 @@ const init = async () => {
     root.insertAdjacentHTML("beforeend", welcomeHTML());
     root.insertAdjacentHTML("beforeend", containerHTML('Our Best Pizzas', cardHTML(pizzaList)));
     root.insertAdjacentHTML("beforeend", orderHTML());
+    
     yourCart = document.querySelector(".your-cart");
     // click event calls
     document.addEventListener('click', inputNbrChangeHandler);

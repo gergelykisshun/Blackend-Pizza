@@ -54,20 +54,21 @@ html {
     scroll-behavior: smooth;
 }
 
+h1,
+h3 {
+    font-family: 'Hind', sans-serif;
+}
+
 h1 {
-    font-family: 'Raleway', sans-serif;
     font-weight: 500;
     font-size: 40px;
-    line-height: 50px;
     color: #fff;
     padding-bottom: 30px;
 }
 
 h3 {
-    font-family: 'Hind', sans-serif;
     font-weight: 300;
     font-size: 22px;
-    line-height: 36px;
     color: #fff;
     padding-bottom: 30px;
 }
@@ -77,7 +78,6 @@ button.primary-btn {
     width: 150px;
     font-family: 'Hind', sans-serif;
     font-size: 16px;
-    line-height: 20px;
     letter-spacing: 1px;
     color: #fff;
     border-radius: 20px;
@@ -101,7 +101,6 @@ button.primary-btn {
     padding: 20px;
     background-color: #4a4a4a;
     z-index: 2;
-    font-family: 'Raleway', sans-serif;
     font-weight: 300;
     font-size: 20px;
     color: #fff;
@@ -221,7 +220,6 @@ button.primary-btn {
     justify-content: center;
     align-items: center;
     gap: 10px;
-    font-family: 'Raleway', sans-serif;
 }
 
 .pizza-card .inner-flex-container button {
@@ -280,7 +278,6 @@ button.primary-btn {
     font-size: 20px;
     font-weight: 500;
     color: var(--bg-main);
-    font-family: 'Hind', sans-serif;
 }
 
 .order-section article form,
