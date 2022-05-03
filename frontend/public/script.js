@@ -18,7 +18,7 @@ const navbarHTML = () => {
     return `
     <nav class="navbar">
         <h4><a href="#top">Blackend</a></h4>
-        <a href="#order"><i class="material-icons left">shopping_basket</i> Basket</a>
+        <a class="basket-container" href="#order"><i class="material-icons left">shopping_basket</i> Basket</a>
     </nav>
     `;
 };

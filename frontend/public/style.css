@@ -111,6 +111,12 @@ button.primary-btn {
     cursor: pointer;
 }
 
+.navbar .basket-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 /* WELCOME SECTION */
 .welcome-section.container {
     position: relative;
