@@ -263,8 +263,8 @@ const orderSubmitHandler = (e) => {
             const dataToSend = new FormData(form);
 
              dataToSend.append('cart', JSON.stringify(validCart));
-             dataToSend.append('orderDate', `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`);
              dataToSend.append('orderDate', `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`);
+             dataToSend.append('status', 'In progress');
             const fetchSetup = {
                 method: 'POST',
                 body: dataToSend
