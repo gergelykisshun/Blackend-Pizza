@@ -1,6 +1,5 @@
 // GLOBAL VARIABLES
 let validCart = [];
-let yourCart;
 
 class CartItem {
     constructor(name, amount, price, imageURL){
@@ -135,9 +134,9 @@ const messageRenderer = (msg) => {
             `)
 };
 
-const renderYourCartDom = () => {
-    yourCart.innerHTML = "";
-    yourCart.insertAdjacentHTML("beforeend", validCart.map(item => cartRenderer(item)).join(''));
+const renderYourCartDom = (cartOnDOM) => {
+    cartOnDOM.innerHTML = "";
+    cartOnDOM.insertAdjacentHTML("beforeend", validCart.map(item => cartRenderer(item)).join(''));
 }
 
 // FETCH
@@ -167,7 +166,7 @@ const inputNbrDecrease = (e) => {
     return inputValue;
 };
 
-const inputNbrChangeHandler = (e) => {
+const inputNbrChangeHandler = (e, cartOnDOM) => {
     let classList = e.target.classList;
     
     if(classList.contains('minus-btn')){
@@ -184,7 +183,7 @@ const inputNbrChangeHandler = (e) => {
             validCart[indexToChange].amount = newNbrValue;
             validCart[indexToChange].calcTotal();
             // render  
-            renderYourCartDom();
+            renderYourCartDom(cartOnDOM);
             
         }
         
@@ -206,11 +205,11 @@ const inputNbrChangeHandler = (e) => {
             validCart[indexToChange].calcTotal();
             
             //render
-            renderYourCartDom();
+            renderYourCartDom(cartOnDOM);
         }
     };
 }
-const addToCartHandler = (e) => {
+const addToCartHandler = (e, cartOnDOM) => {
     let classList = e.target.classList;
     
     if (classList.contains('add-cart-btn')){
@@ -232,7 +231,7 @@ const addToCartHandler = (e) => {
             validCart.push(itemToCart);
         }
 
-        renderYourCartDom();
+        renderYourCartDom(cartOnDOM);
     }
 }
 const checkInputFieldContent = (recListOfInputFields) => {
@@ -246,7 +245,7 @@ const checkInputFieldContent = (recListOfInputFields) => {
     })
     return fieldsAreFilled;
 };
-const orderSubmitHandler = (e) => {
+const orderSubmitHandler = (e, cartOnDOM) => {
     let classList = e.target.classList;
     if(classList.contains('checkout-btn')){
         const form = document.querySelector('.order-section article form');
@@ -276,8 +275,8 @@ const orderSubmitHandler = (e) => {
                         input.value = '';
                     })
                     validCart = [];
-                    yourCart.innerHTML = "";
-                    yourCart.insertAdjacentHTML("beforeend", emptyOrderHTML());
+                    cartOnDOM.innerHTML = "";
+                    cartOnDOM.insertAdjacentHTML("beforeend", emptyOrderHTML());
                     
                 }
             }).catch(error => {
@@ -325,7 +324,7 @@ const closePreviousOrders = (e) => {
         document.querySelector('.prev-order-overlay').remove();
     }  
 };
-const deleteFromCartHandler = (e) => {
+const deleteFromCartHandler = (e, cartOnDOM) => {
     let classList = e.target.classList;
     if (classList.contains('delete-item-btn')){
         const pizzaName = e.target.parentNode.children[1].textContent;
@@ -333,10 +332,10 @@ const deleteFromCartHandler = (e) => {
         console.log(validCart);
         //render
         if (validCart.length === 0){
-            yourCart.innerHTML = "";
-            yourCart.insertAdjacentHTML("beforeend", emptyOrderHTML());
+            cartOnDOM.innerHTML = "";
+            cartOnDOM.insertAdjacentHTML("beforeend", emptyOrderHTML());
         } else {
-            renderYourCartDom();
+            renderYourCartDom(cartOnDOM);
         };
     }
 };
@@ -350,12 +349,12 @@ const init = async () => {
     root.insertAdjacentHTML("beforeend", containerHTML('Our Best Pizzas', cardHTML(pizzaList)));
     root.insertAdjacentHTML("beforeend", orderHTML());
     
-    yourCart = document.querySelector(".your-cart");
+    const yourCart = document.querySelector(".your-cart");
     // click event calls
-    document.addEventListener('click', inputNbrChangeHandler);
-    document.addEventListener('click', addToCartHandler);
-    document.addEventListener('click', deleteFromCartHandler);
-    document.addEventListener('click', orderSubmitHandler);
+    document.addEventListener('click', (e) => inputNbrChangeHandler(e, yourCart));
+    document.addEventListener('click', (e) => addToCartHandler(e, yourCart));
+    document.addEventListener('click', (e) => deleteFromCartHandler(e, yourCart));
+    document.addEventListener('click', (e) => orderSubmitHandler(e, yourCart));
     document.addEventListener('click', seePreviousOrders);
     document.addEventListener('click', closePreviousOrders);
 };
